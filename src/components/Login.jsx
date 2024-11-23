@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Headbar from './Headbar';
 
 const Login = ({ baseUrl }) => {
 	const [email, setEmail] = useState('');
@@ -17,9 +18,9 @@ const Login = ({ baseUrl }) => {
 		setPassword(event.target.value.trim());
 	};
 
-    const storeToken = (token) => {
-        localStorage.setItem('jwtToken', token);
-    };
+	const storeToken = (token) => {
+		localStorage.setItem('jwtToken', token);
+	};
 
 	const handleLoginButton = async () => {
 		if (email === '' || password === '') {
@@ -47,18 +48,24 @@ const Login = ({ baseUrl }) => {
 
 	return (
 		<div>
-			<h1>Shopply</h1>
-			<h2>Logowanie</h2>
-			<p>{error}</p>
-			<label>
-				podaj email
-				<input type='text' value={email} onInput={handleEmailInput} />
-			</label>
-			<label>
-				podaj hasło
-				<input type='password' value={password} onInput={handlePasswordInput} />
-			</label>
-			<button onClick={handleLoginButton}>zaloguj się</button>
+			<Headbar />
+			<div className='login'>
+				<h2>Logowanie</h2>
+				<p className='error-message'>{error}</p>
+				<label>
+					podaj email
+					<input type='text' value={email} onInput={handleEmailInput} />
+				</label>
+				<label>
+					podaj hasło
+					<input
+						type='password'
+						value={password}
+						onInput={handlePasswordInput}
+					/>
+				</label>
+				<button onClick={handleLoginButton}>zaloguj się</button>
+			</div>
 		</div>
 	);
 };

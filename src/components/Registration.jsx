@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Background from './Background';
+import Headbar from './Headbar';
 
 const Registration = ({ baseUrl }) => {
 	const [email, setEmail] = useState('');
@@ -44,29 +44,38 @@ const Registration = ({ baseUrl }) => {
 				}
 			} catch (error) {
 				setError('Wystąpił błąd podczas rejestracji');
-				console.error(error);
 			}
 		}
 	};
 
 	return (
 		<div>
-            <h1>Shopply</h1>
-			<h2>Rejestracja</h2>
-			<p>{error}</p>
-			<label>
-				podaj email
-				<input type='text' value={email} onInput={handleEmailInput} />
-			</label>
-			<label>
-				podaj hasło
-				<input type='password' value={password} onInput={handlePasswordInput} />
-			</label>
-			<label>
-                powtórz hasło
-				<input type='password' value={repeatedPassword} onInput={handleRepeatedPasswordInput} />
-			</label>
-			<button onClick={handleRegisterButton}>zarejestruj się się</button>
+			<Headbar />
+			<div className='registration'>
+				<h2>Zarejestruj się</h2>
+				<p className='error-message'>{error}</p>
+				<label>
+					podaj email
+					<input type='text' value={email} onInput={handleEmailInput} />
+				</label>
+				<label>
+					podaj hasło
+					<input
+						type='password'
+						value={password}
+						onInput={handlePasswordInput}
+					/>
+				</label>
+				<label>
+					powtórz hasło
+					<input
+						type='password'
+						value={repeatedPassword}
+						onInput={handleRepeatedPasswordInput}
+					/>
+				</label>
+				<button onClick={handleRegisterButton}>zarejestruj się</button>
+			</div>
 		</div>
 	);
 };

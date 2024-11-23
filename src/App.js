@@ -1,4 +1,6 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import axios from 'axios';
 
 import AddItem from './components/AddItem';
 import DisplayItems from './components/DisplayItems';
@@ -11,22 +13,73 @@ import EditItem from './components/EditItem';
 const App = () => {
   const BASE_URL = 'http://192.168.100.112:8080';
 
+  const handleLogoutButton = async (navigate) => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      await axios.post(
+        `${BASE_URL}/api/users/logout`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      localStorage.removeItem('jwtToken');
+      navigate('/');
+    } catch (error) {
+      console.error('Błąd wylogowania:', error);
+    }
+  };
+
   return (
-    <div className="app-container">
-      <h1></h1>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login baseUrl={BASE_URL} />} />
-          <Route path="/registration" element={<Registration baseUrl={BASE_URL} />} />
-          <Route path="/display-items" element={<DisplayItems />} />
-          <Route path="/add-item" element={<AddItem />} />
-          <Route path="/edit-item" element={<EditItem />} />
-          <Route path="/item-details" element={<ItemDetails />} />
-        </Routes>
-      </Router>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/login"
+          element={<Login baseUrl={BASE_URL} />}
+        />
+        <Route
+          path="/registration"
+          element={<Registration baseUrl={BASE_URL} />}
+        />
+        <Route
+          path="/display-items"
+          element={
+            <DisplayItems
+              baseUrl={BASE_URL}
+              handleLogoutButton={(navigate) => handleLogoutButton(navigate)}
+            />
+          }
+        />
+        <Route
+          path="/add-item"
+          element={
+            <AddItem
+              baseUrl={BASE_URL}
+              handleLogoutButton={(navigate) => handleLogoutButton(navigate)}
+            />
+          }
+        />
+        <Route
+          path="/edit-item"
+          element={
+            <EditItem
+              baseUrl={BASE_URL}
+              handleLogoutButton={(navigate) => handleLogoutButton(navigate)}
+            />
+          }
+        />
+        <Route
+          path="/item-details"
+          element={
+            <ItemDetails
+              handleLogoutButton={(navigate) => handleLogoutButton(navigate)}
+            />
+          }
+        />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;

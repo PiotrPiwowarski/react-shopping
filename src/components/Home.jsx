@@ -1,25 +1,28 @@
-import Background from './Background';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Headbar from './Headbar';
 
 const Home = () => {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	const logInButtonHandler = () => {
-		navigate('/login');
-	};
+  const logInButtonHandler = () => {
+    navigate('/login');
+  };
 
-	const registrationButtonHandler = () => {
-		navigate('/registration');
-	};
+  const registrationButtonHandler = () => {
+    navigate('/registration');
+  };
 
-	return (
-		<div>
-			<h1>Shopply</h1>
-            <h2>Home</h2>
-			<button onClick={logInButtonHandler}>zaloguj się</button>
-			<button onClick={registrationButtonHandler}>zarejestruj się</button>
-		</div>
-	);
+  return (
+    <div>
+      <Headbar />
+
+      <div className='home'>
+        <button onClick={logInButtonHandler} >zaloguj się</button>
+        <button onClick={registrationButtonHandler}c >zarejestruj się</button>
+      </div>
+    </div>
+  );
 };
 
 export default Home;

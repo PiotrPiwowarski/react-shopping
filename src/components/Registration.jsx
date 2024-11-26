@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Headbar from './Headbar';
+import TitleBar from './TitleBar';
 
 const Registration = ({ baseUrl }) => {
 	const [email, setEmail] = useState('');
@@ -51,8 +52,8 @@ const Registration = ({ baseUrl }) => {
 	return (
 		<div>
 			<Headbar />
-			<div className='registration'>
-				<h2>Zarejestruj się</h2>
+			<TitleBar title='Zarejestruj się' />
+			<div className='vertical-container'>
 				<p className='error-message'>{error}</p>
 				<label>
 					podaj email

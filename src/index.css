@@ -10,25 +10,52 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
+/* buttons */
+
 button {
   margin: 10px;
   padding: 10px;
   border: none;
   background-color: grey;
   color: white;
+  border-radius: 10px;
 }
 
 button:hover {
   background-color: lightgrey;
 }
 
+.delete-button {
+  color: rgb(247, 0, 0);
+}
+
+.delete-button:hover {
+  background-color: rgb(228, 95, 95);
+}
+
+/* inputs */
+
 input {
   margin: 10px;
 }
 
+/* h2 */
+
 h2 {
   margin: 10px;
 }
+
+h3 {
+  margin: 10px;
+}
+
+/* p */
+
+p {
+  margin: 10px;
+}
+
+/* errors */
 
 .error-message {
   margin: 10;
@@ -43,13 +70,41 @@ h2 {
   color: white;
 }
 
-/* home, registration, login */
+/* vertical container */
 
-.home, .registration, .login {
+.vertical-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 30px;
+}
+
+/* horizontal container */
+
+.horizontal-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   margin: 100px;
+}
+
+/* item container */
+
+.item-container {
+  width: 70vw;
+  height: 400px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+/* title bar */
+
+.title-container {
+  text-align: center;
+  height: 100px;
+  line-height: 100px;
+  color: grey;
 }
 

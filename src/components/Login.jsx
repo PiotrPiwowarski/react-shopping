@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Headbar from './Headbar';
+import TitleBar from './TitleBar';
 
 const Login = ({ baseUrl }) => {
 	const [email, setEmail] = useState('');
@@ -34,8 +35,9 @@ const Login = ({ baseUrl }) => {
 				});
 				if (response.status === 200) {
 					const token = response.data.token;
+					const userId = response.data.userId;
 					storeToken(token);
-					navigate('DisplayItems');
+					navigate('/display-items', {state: {userId}});
 				} else {
 					setError('Błąd logowania');
 				}
@@ -49,8 +51,8 @@ const Login = ({ baseUrl }) => {
 	return (
 		<div>
 			<Headbar />
-			<div className='login'>
-				<h2>Logowanie</h2>
+			<TitleBar title='Zaloguj się' />
+			<div className='vertical-container'>
 				<p className='error-message'>{error}</p>
 				<label>
 					podaj email

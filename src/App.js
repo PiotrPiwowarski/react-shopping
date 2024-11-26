@@ -1,17 +1,14 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes  } from 'react-router-dom';
 import axios from 'axios';
 
-import AddItem from './components/AddItem';
 import DisplayItems from './components/DisplayItems';
 import Home from './components/Home';
 import Login from './components/Login';
 import Registration from './components/Registration';
-import ItemDetails from './components/ItemDetails';
-import EditItem from './components/EditItem';
 
 const App = () => {
-  const BASE_URL = 'http://192.168.100.112:8080';
+  const BASE_URL = 'http://localhost:8080';
 
   const handleLogoutButton = async (navigate) => {
     try {
@@ -47,32 +44,6 @@ const App = () => {
           element={
             <DisplayItems
               baseUrl={BASE_URL}
-              handleLogoutButton={(navigate) => handleLogoutButton(navigate)}
-            />
-          }
-        />
-        <Route
-          path="/add-item"
-          element={
-            <AddItem
-              baseUrl={BASE_URL}
-              handleLogoutButton={(navigate) => handleLogoutButton(navigate)}
-            />
-          }
-        />
-        <Route
-          path="/edit-item"
-          element={
-            <EditItem
-              baseUrl={BASE_URL}
-              handleLogoutButton={(navigate) => handleLogoutButton(navigate)}
-            />
-          }
-        />
-        <Route
-          path="/item-details"
-          element={
-            <ItemDetails
               handleLogoutButton={(navigate) => handleLogoutButton(navigate)}
             />
           }

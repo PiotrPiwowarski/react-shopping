@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Headbar from './Headbar';
+import TitleBar from './TitleBar'
 
 const Home = () => {
   const navigate = useNavigate();
@@ -16,10 +17,10 @@ const Home = () => {
   return (
     <div>
       <Headbar />
-
-      <div className='home'>
+      <TitleBar title='Dzień dobry' />
+      <div className='vertical-container'>
         <button onClick={logInButtonHandler} >zaloguj się</button>
-        <button onClick={registrationButtonHandler}c >zarejestruj się</button>
+        <button onClick={registrationButtonHandler} >zarejestruj się</button>
       </div>
     </div>
   );

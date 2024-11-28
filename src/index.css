@@ -33,6 +33,10 @@ button:hover {
   background-color: rgb(228, 95, 95);
 }
 
+.item-button {
+  width: 80px;
+}
+
 /* inputs */
 
 input {
@@ -94,7 +98,6 @@ p {
 
 .item-container {
   width: 70vw;
-  height: 400px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
 }

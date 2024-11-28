@@ -13,36 +13,36 @@ const DisplayItems = ({ baseUrl }) => {
 	const [items, setItems] = useState([]);
 	const [errorMessage, setErrorMessage] = useState('');
 
-	useEffect(() => {
-		if (!userId) {
-			setErrorMessage('brak id użytkownika...');
-			return;
-		}
-		const fetchItems = async () => {
-			try {
-				const token = localStorage.getItem('jwtToken');
+	const fetchItems = async () => {
+        if (!userId) {
+            setErrorMessage('Brak id użytkownika...');
+            return;
+        }
+        try {
+            const token = localStorage.getItem('jwtToken');
 
-				const itemsResponse = await axios.get(
-					`${baseUrl}/api/items/${parseInt(userId)}`,
-					{
-						headers: { Authorization: `Bearer ${token}` },
-					}
-				);
-				const userResponse = await axios.get(
-					`${baseUrl}/api/users/${parseInt(userId)}`,
-					{
-						headers: { Authorization: `Bearer ${token}` },
-					}
-				);
-				setItems(itemsResponse.data);
-				setUser(userResponse.data);
-			} catch (error) {
-				setErrorMessage('Pobranie listy produktów się nie powiodło');
-			}
-		};
+            const itemsResponse = await axios.get(
+                `${baseUrl}/api/items/${parseInt(userId)}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            const userResponse = await axios.get(
+                `${baseUrl}/api/users/${parseInt(userId)}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            setItems(itemsResponse.data);
+            setUser(userResponse.data);
+        } catch (error) {
+            setErrorMessage('Pobranie listy produktów się nie powiodło');
+        }
+    };
 
-		fetchItems();
-	}, [userId, baseUrl]);
+    useEffect(() => {
+        fetchItems();
+    }, [userId, baseUrl]);
 
 	return (
 		<div>
@@ -52,7 +52,7 @@ const DisplayItems = ({ baseUrl }) => {
 				<p>Cześć {user.email}!</p>
 				<p className='error-message'>{errorMessage}</p>
 				{items.map((item) => {
-					return <Item key={item.id} item={item} baseUrl={baseUrl} />;
+					return <Item key={item.id} item={item} baseUrl={baseUrl} setErrorMessage={setErrorMessage} refreshItems={fetchItems} />;
 				})}
 			</div>
 		</div>

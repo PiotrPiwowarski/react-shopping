@@ -7,6 +7,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Registration from './components/Registration';
 import AddItem from './components/AddItem';
+import EditItem from './components/EditItem';
 
 const App = () => {
 	const BASE_URL = 'http://localhost:8080';
@@ -47,6 +48,7 @@ const App = () => {
 					}
 				/>
 				<Route path='/add-item' element={<AddItem baseUrl={BASE_URL} />} />
+        <Route path='/edit-item' element={<EditItem baseUrl={BASE_URL} />} />
 			</Routes>
 		</Router>
 	);

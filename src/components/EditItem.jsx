@@ -1,21 +1,21 @@
-import { useState } from 'react';
-import TitleBar from './TitleBar';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import BackButtonBar from './BackButtonBar';
+import axios from 'axios';
+import {useState} from 'react';
+import TitleBar from './TitleBar'
 
-const AddItem = ({ baseUrl }) => {
+const EditItem = ({ baseUrl }) => {
 	const location = useLocation();
-	const { userId } = location.state || {};
+	const { userId, item } = location.state || {};
 	const navigate = useNavigate();
 
-	const [shop, setShop] = useState('');
-	const [productName, setProductName] = useState('');
-	const [price, setPrice] = useState('');
-	const [amount, setAmount] = useState('');
-	const [description, setDescription] = useState('');
-	const [errorMessage, setErrorMessage] = useState('');
+    const [shop, setShop] = useState(item.shop);
+	const [productName, setProductName] = useState(item.productName);
+	const [price, setPrice] = useState(item.price);
+	const [amount, setAmount] = useState(item.amount);
+	const [description, setDescription] = useState(item.description);
+	const [errorMessage, setErrorMessage] = useState(item.message);
 
 	const handleShopInput = (event) => {
 		setShop(event.target.value.trim());
@@ -54,9 +54,10 @@ const AddItem = ({ baseUrl }) => {
 			try {
 				setErrorMessage('');
 				const token = localStorage.getItem('jwtToken');
-				await axios.post(
+				await axios.put(
 					`${baseUrl}/api/items`,
 					{
+                        id: item.id,
 						shop: shop,
 						productName: productName,
 						price: price,
@@ -71,7 +72,7 @@ const AddItem = ({ baseUrl }) => {
 				);
                 navigate('/display-items', {state: {userId}});
 			} catch (error) {
-				setErrorMessage('Wystąpił błąd podczas dodawania produktu');
+				setErrorMessage('Wystąpił błąd podczas edycji produktu');
 				console.error(error);
 			}
 		}
@@ -79,8 +80,8 @@ const AddItem = ({ baseUrl }) => {
 
 	return (
 		<div>
-            <BackButtonBar userId={userId} />
-			<TitleBar title='Twoje produkty' />
+			<BackButtonBar userId={userId} />
+			<TitleBar title='Edytuj produkt' />
 			<div className='vertical-container'>
 				<p className='error-message'>{errorMessage}</p>
 				<label>
@@ -111,10 +112,10 @@ const AddItem = ({ baseUrl }) => {
 						onChange={handleDescriptionInput}
 					/>
 				</label>
-				<button onClick={handleAddItemButton}>dodaj produkt</button>
+				<button onClick={handleAddItemButton}>edytuj produkt</button>
 			</div>
 		</div>
 	);
 };
 
-export default AddItem;
+export default EditItem;

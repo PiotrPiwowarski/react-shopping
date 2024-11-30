@@ -1,9 +1,11 @@
 import axios from 'axios';
 import {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Item = ({ baseUrl, item, setErrorMessage, refreshItems }) => {
 
 	const [displayDetails, setDisplayDetails] = useState();
+	const navigate = useNavigate();
 
 	const handleBuyItem = async () => {
 		try {
@@ -38,6 +40,10 @@ const Item = ({ baseUrl, item, setErrorMessage, refreshItems }) => {
 			refreshItems();
 	}
 
+	const editItem = () => {
+		navigate('/edit-item', {state: {userId: item.userId, item: item}})
+	}
+
 	return (
 		<div className='vertical-container item-container '>
 			<h3>{item.productName}</h3>
@@ -58,7 +64,7 @@ const Item = ({ baseUrl, item, setErrorMessage, refreshItems }) => {
 				</div>
 				<div>
 					<button className='item-button' onClick={handleDisplayDetails}>szczegóły</button>
-					<button className='item-button'>edytuj</button>
+					<button className='item-button' onClick={editItem}>edytuj</button>
 				</div>
 			</div>
 		</div>

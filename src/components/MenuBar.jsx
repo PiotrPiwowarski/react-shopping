@@ -34,12 +34,15 @@ const MenuBar = ({baseUrl, userId, setErrorMessage}) => {
 		}
 	}
 
+	const handleAddItemButton = () => {
+		navigate('/add-item', {state: {userId}});
+	}
+
 	return (
 		<div className='headbar'>
-			<button onClick={handleDeleteButton} className='delete-button'>usuń konto</button>
+			<button onClick={handleDeleteButton}>usuń konto</button>
 			<button onClick={handleLogoutButton}>wyloguj się</button>
-			<button>filtruj</button>
-			<button>dodaj produkt</button>
+			<button onClick={handleAddItemButton}>dodaj produkt</button>
 		</div>
 	);
 };

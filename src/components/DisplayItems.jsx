@@ -48,7 +48,7 @@ const DisplayItems = () => {
 
 	return (
 		<div>
-			<MenuBar baseUrl={baseUrl} userId={userId} setErrorMessage={setErrorMessage} />
+			<MenuBar  userId={userId} setErrorMessage={setErrorMessage} />
 			<TitleBar title='Twoje produkty' />
 			<div className='vertical-container'>
 				<p>Cześć {user.email}!</p>

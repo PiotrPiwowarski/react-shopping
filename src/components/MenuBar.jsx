@@ -6,6 +6,7 @@ const MenuBar = ({userId, setErrorMessage}) => {
 
 	const navigate = useNavigate();
 	const baseUrl = useStore(state => state.baseUrl);
+	const handleLogoutButton = useStore(state => state.handleLogoutButton);
 
 	const handleDeleteButton = async () => {
 		try {
@@ -19,23 +20,6 @@ const MenuBar = ({userId, setErrorMessage}) => {
 		}
 	};
 
-	const handleLogoutButton = async () => {
-		try {
-			const token = localStorage.getItem('jwtToken');
-			await axios.post(
-				`${baseUrl}/api/users/logout`,
-				{},
-				{
-					headers: { Authorization: `Bearer ${token}` },
-				}
-			);
-			localStorage.removeItem('jwtToken');
-			navigate('/')
-		} catch(error) {
-			setErrorMessage('Błąd wylogowania');
-		}
-	}
-
 	const handleAddItemButton = () => {
 		navigate('/add-item', {state: {userId}});
 	}
@@ -43,7 +27,7 @@ const MenuBar = ({userId, setErrorMessage}) => {
 	return (
 		<div className='headbar'>
 			<button onClick={handleDeleteButton}>usuń konto</button>
-			<button onClick={handleLogoutButton}>wyloguj się</button>
+			<button onClick={() => handleLogoutButton(navigate)}>wyloguj się</button>
 			<button onClick={handleAddItemButton}>dodaj produkt</button>
 		</div>
 	);

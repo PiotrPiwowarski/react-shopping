@@ -15,7 +15,7 @@ const DisplayItems = () => {
 	const [items, setItems] = useState([]);
 	const [errorMessage, setErrorMessage] = useState('');
 
-	const fetchItems = async () => {
+	const fetchItems = async (baseUrl, userId) => {
         if (!userId) {
             setErrorMessage('Brak id użytkownika...');
             return;
@@ -43,7 +43,7 @@ const DisplayItems = () => {
     };
 
     useEffect(() => {
-        fetchItems();
+        fetchItems(baseUrl, userId);
     }, [userId, baseUrl]);
 
 	return (

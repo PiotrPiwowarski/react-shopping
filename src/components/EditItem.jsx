@@ -4,11 +4,13 @@ import BackButtonBar from './BackButtonBar';
 import axios from 'axios';
 import {useState} from 'react';
 import TitleBar from './TitleBar'
+import useStore from './useStore';
 
-const EditItem = ({ baseUrl }) => {
+const EditItem = () => {
 	const location = useLocation();
 	const { userId, item } = location.state || {};
 	const navigate = useNavigate();
+	const baseUrl = useStore(state => state.baseUrl);
 
     const [shop, setShop] = useState(item.shop);
 	const [productName, setProductName] = useState(item.productName);

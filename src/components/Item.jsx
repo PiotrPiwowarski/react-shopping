@@ -1,11 +1,13 @@
 import axios from 'axios';
 import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import useStore from './useStore';
 
-const Item = ({ baseUrl, item, setErrorMessage, refreshItems }) => {
+const Item = ({ item, setErrorMessage, refreshItems }) => {
 
 	const [displayDetails, setDisplayDetails] = useState();
 	const navigate = useNavigate();
+	const baseUrl = useStore(state => state.baseUrl);
 
 	const handleBuyItem = async () => {
 		try {

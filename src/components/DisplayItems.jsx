@@ -4,10 +4,12 @@ import Item from './Item';
 import MenuBar from './MenuBar';
 import TitleBar from './TitleBar';
 import { useLocation } from 'react-router-dom';
+import useStore from './useStore';
 
-const DisplayItems = ({ baseUrl }) => {
+const DisplayItems = () => {
 	const location = useLocation();
 	const { userId } = location.state || {};
+    const baseUrl = useStore(state => state.baseUrl);
 
 	const [user, setUser] = useState('');
 	const [items, setItems] = useState([]);
@@ -52,7 +54,7 @@ const DisplayItems = ({ baseUrl }) => {
 				<p>Cześć {user.email}!</p>
 				<p className='error-message'>{errorMessage}</p>
 				{items.map((item) => {
-					return <Item key={item.id} item={item} baseUrl={baseUrl} setErrorMessage={setErrorMessage} refreshItems={fetchItems} />;
+					return <Item key={item.id} item={item} setErrorMessage={setErrorMessage} refreshItems={fetchItems} />;
 				})}
 			</div>
 		</div>

@@ -3,12 +3,14 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Headbar from './Headbar';
 import TitleBar from './TitleBar';
+import useStore from './useStore';
 
-const Registration = ({ baseUrl }) => {
+const Registration = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [repeatedPassword, setRepeatedPassword] = useState('');
 	const [error, setError] = useState('');
+	const baseUrl = useStore(state => state.baseUrl);
 
 	const navigate = useNavigate();
 

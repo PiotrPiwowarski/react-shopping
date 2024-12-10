@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import useStore from './useStore';
 
-const MenuBar = ({baseUrl, userId, setErrorMessage}) => {
+const MenuBar = ({userId, setErrorMessage}) => {
 
 	const navigate = useNavigate();
+	const baseUrl = useStore(state => state.baseUrl);
 
 	const handleDeleteButton = async () => {
 		try {

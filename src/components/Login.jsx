@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Headbar from './Headbar';
 import TitleBar from './TitleBar';
+import useStore from './useStore';
 
-const Login = ({ baseUrl }) => {
+const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
+	const baseUrl  = useStore(state => state.baseUrl);
 
 	const navigate = useNavigate();
 

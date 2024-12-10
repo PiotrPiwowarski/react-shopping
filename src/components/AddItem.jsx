@@ -4,11 +4,13 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import BackButtonBar from './BackButtonBar';
+import useStore from './useStore';
 
-const AddItem = ({ baseUrl }) => {
+const AddItem = () => {
 	const location = useLocation();
 	const { userId } = location.state || {};
 	const navigate = useNavigate();
+	const baseUrl = useStore(state => state.basUrl);
 
 	const [shop, setShop] = useState('');
 	const [productName, setProductName] = useState('');

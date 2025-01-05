@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Headbar from './Headbar';
-import TitleBar from './TitleBar'
+import TitleBar from './TitleBar';
 
 const Home = () => {
   const navigate = useNavigate();

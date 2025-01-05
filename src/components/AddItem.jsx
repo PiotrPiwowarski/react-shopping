@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TitleBar from './TitleBar';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -18,6 +18,23 @@ const AddItem = () => {
 	const [amount, setAmount] = useState('');
 	const [description, setDescription] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
+	const [isOffline, setIsOffline] = useState(false);
+
+	useEffect(() => {
+		const handleOnlineStatus = () => {
+		  setIsOffline(!navigator.onLine);
+		};
+	
+		handleOnlineStatus();
+	
+		window.addEventListener('online', handleOnlineStatus);
+		window.addEventListener('offline', handleOnlineStatus);
+	
+		return () => {
+		  window.removeEventListener('online', handleOnlineStatus);
+		  window.removeEventListener('offline', handleOnlineStatus);
+		};
+	  }, []);
 
 	const handleShopInput = (event) => {
 		setShop(event.target.value.trim());
@@ -52,6 +69,8 @@ const AddItem = () => {
 	const handleAddItemButton = async () => {
 		if (shop === '' || productName === '' || price === '' || amount === '') {
 			setErrorMessage('wypełnij wszystkie wymagane pola formularza');
+		} else if(isOffline) {
+			setErrorMessage('Jesteś w trybie offline');
 		} else {
 			try {
 				setErrorMessage('');

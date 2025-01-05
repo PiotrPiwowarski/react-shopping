@@ -5,6 +5,12 @@ const useStore = create((set) => ({
     baseUrl: 'http://localhost:8080',
 
     handleLogoutButton: async (navigate) => {
+
+		if(!navigator.onLine) {
+			alert('Jesteś w trybie offline, nie możesz się teraz wylogować')
+			return;
+		}
+
 		try {
 			const token = localStorage.getItem('jwtToken');
 			await axios.post(
@@ -18,6 +24,7 @@ const useStore = create((set) => ({
 			navigate('/');
 		} catch (error) {
 			console.error('Błąd wylogowania:', error);
+			navigate('/');
 		}
 	}
 }));

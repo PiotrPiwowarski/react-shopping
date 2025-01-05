@@ -17,7 +17,7 @@ const DisplayItems = () => {
 
 	const fetchItems = async (baseUrl, userId) => {
         if (!userId) {
-            setErrorMessage('Brak id użytkownika...');
+            setErrorMessage('coś poszło nie tak...');
             return;
         }
         try {

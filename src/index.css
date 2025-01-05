@@ -16,21 +16,13 @@ button {
   margin: 10px;
   padding: 10px;
   border: none;
-  background-color: grey;
+  background-color: #9a031e;
   color: white;
   border-radius: 10px;
 }
 
 button:hover {
-  background-color: lightgrey;
-}
-
-.delete-button {
-  color: rgb(247, 0, 0);
-}
-
-.delete-button:hover {
-  background-color: rgb(228, 95, 95);
+  background-color: #9a031f7a;
 }
 
 .item-button {
@@ -70,7 +62,7 @@ p {
 
 .headbar {
   text-align: center;
-  background-color: grey;
+  background-color: #5f0f40;
   color: white;
 }
 
@@ -108,6 +100,6 @@ p {
   text-align: center;
   height: 100px;
   line-height: 100px;
-  color: grey;
+  color: #cb793a;
 }
 

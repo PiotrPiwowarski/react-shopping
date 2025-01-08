@@ -3,25 +3,21 @@ import axios from 'axios';
 import Item from './Item';
 import MenuBar from './MenuBar';
 import TitleBar from './TitleBar';
-import { useLocation } from 'react-router-dom';
 import useStore from './useStore';
 
 const DisplayItems = () => {
-	const location = useLocation();
-	const { userId } = location.state || {};
     const baseUrl = useStore(state => state.baseUrl);
 
 	const [user, setUser] = useState('');
 	const [items, setItems] = useState([]);
 	const [errorMessage, setErrorMessage] = useState('');
 
-	const fetchItems = async (baseUrl, userId) => {
-        if (!userId) {
-            setErrorMessage('coś poszło nie tak...');
-            return;
-        }
+	const fetchItems = async (baseUrl) => {
         try {
             const token = localStorage.getItem('jwtToken');
+            const userId = localStorage.getItem('userId');
+
+            console.log(userId);
 
             const itemsResponse = await axios.get(
                 `${baseUrl}/api/items/${parseInt(userId)}`,
@@ -43,12 +39,12 @@ const DisplayItems = () => {
     };
 
     useEffect(() => {
-        fetchItems(baseUrl, userId);
-    }, [userId, baseUrl]);
+        fetchItems(baseUrl);
+    }, [baseUrl]);
 
 	return (
 		<div>
-			<MenuBar  userId={userId} setErrorMessage={setErrorMessage} />
+			<MenuBar setErrorMessage={setErrorMessage} />
 			<TitleBar title='Twoje produkty' />
 			<div className='vertical-container'>
 				<p>Cześć {user.email}!</p>

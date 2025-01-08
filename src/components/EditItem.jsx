@@ -8,7 +8,7 @@ import useStore from './useStore';
 
 const EditItem = () => {
 	const location = useLocation();
-	const { userId, item } = location.state || {};
+	const { item } = location.state || {};
 	const navigate = useNavigate();
 	const baseUrl = useStore(state => state.baseUrl);
 
@@ -56,6 +56,7 @@ const EditItem = () => {
 			try {
 				setErrorMessage('');
 				const token = localStorage.getItem('jwtToken');
+				const userId = localStorage.getItem('userId');
 				await axios.put(
 					`${baseUrl}/api/items`,
 					{
@@ -82,7 +83,7 @@ const EditItem = () => {
 
 	return (
 		<div>
-			<BackButtonBar userId={userId} />
+			<BackButtonBar />
 			<TitleBar title='Edytuj produkt' />
 			<div className='vertical-container'>
 				<p className='error-message'>{errorMessage}</p>

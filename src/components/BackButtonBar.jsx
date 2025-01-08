@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
-const BackButtonBar = ({userId}) => {
+const BackButtonBar = () => {
     const navigate = useNavigate();
 
     const handleReturnButton = () => {
-        navigate('/display-items', {state: {userId}});
+        navigate('/display-items');
     }
 
     return (

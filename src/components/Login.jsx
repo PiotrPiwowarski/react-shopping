@@ -21,10 +21,6 @@ const Login = () => {
 		setPassword(event.target.value.trim());
 	};
 
-	const storeToken = (token) => {
-		localStorage.setItem('jwtToken', token);
-	};
-
 	const handleLoginButton = async () => {
 		if (email === '' || password === '') {
 			setError('wypełnij wszystkie pola formularza');
@@ -38,13 +34,14 @@ const Login = () => {
 				if (response.status === 200) {
 					const token = response.data.token;
 					const userId = response.data.userId;
-					storeToken(token);
-					navigate('/display-items', {state: {userId}});
+					localStorage.setItem('jwtToken', token);
+					localStorage.setItem('userId', userId);
+					navigate('/display-items');
 				} else {
 					setError('Błąd logowania');
 				}
 			} catch (error) {
-				setError('Wystąpił błąd podczas logowania');
+				setError('Błąd logowania');
 				console.error(error);
 			}
 		}

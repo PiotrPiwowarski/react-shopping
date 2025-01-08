@@ -20,7 +20,7 @@ const Item = ({ item, setErrorMessage, refreshItems }) => {
 					headers: { Authorization: `Bearer ${token}` },
 				}
 			);
-			refreshItems();
+			refreshItems(baseUrl);
 		} catch (error) {
 			setErrorMessage('Zakup produktu się nie powiódł');
 		}
@@ -39,11 +39,11 @@ const Item = ({ item, setErrorMessage, refreshItems }) => {
 					headers: { Authorization: `Bearer ${token}` },
 				}
 			);
-			refreshItems();
+			refreshItems(baseUrl);
 	}
 
 	const editItem = () => {
-		navigate('/edit-item', {state: {userId: item.userId, item: item}})
+		navigate('/edit-item', {state: {item: item}})
 	}
 
 	return (

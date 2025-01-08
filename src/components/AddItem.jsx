@@ -1,16 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import TitleBar from './TitleBar';
-import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import BackButtonBar from './BackButtonBar';
 import useStore from './useStore';
 
 const AddItem = () => {
-	const location = useLocation();
-	const { userId } = location.state || {};
 	const navigate = useNavigate();
-	const baseUrl = useStore(state => state.basUrl);
+	const baseUrl = useStore(state => state.baseUrl);
 
 	const [shop, setShop] = useState('');
 	const [productName, setProductName] = useState('');
@@ -18,23 +15,6 @@ const AddItem = () => {
 	const [amount, setAmount] = useState('');
 	const [description, setDescription] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
-	const [isOffline, setIsOffline] = useState(false);
-
-	useEffect(() => {
-		const handleOnlineStatus = () => {
-		  setIsOffline(!navigator.onLine);
-		};
-	
-		handleOnlineStatus();
-	
-		window.addEventListener('online', handleOnlineStatus);
-		window.addEventListener('offline', handleOnlineStatus);
-	
-		return () => {
-		  window.removeEventListener('online', handleOnlineStatus);
-		  window.removeEventListener('offline', handleOnlineStatus);
-		};
-	  }, []);
 
 	const handleShopInput = (event) => {
 		setShop(event.target.value.trim());
@@ -69,12 +49,11 @@ const AddItem = () => {
 	const handleAddItemButton = async () => {
 		if (shop === '' || productName === '' || price === '' || amount === '') {
 			setErrorMessage('wypełnij wszystkie wymagane pola formularza');
-		} else if(isOffline) {
-			setErrorMessage('Jesteś w trybie offline');
-		} else {
+		}  else {
 			try {
 				setErrorMessage('');
 				const token = localStorage.getItem('jwtToken');
+				const userId = localStorage.getItem('userId');
 				await axios.post(
 					`${baseUrl}/api/items`,
 					{
@@ -90,7 +69,7 @@ const AddItem = () => {
 						headers: { Authorization: `Bearer ${token}` },
 					}
 				);
-                navigate('/display-items', {state: {userId}});
+                navigate('/display-items');
 			} catch (error) {
 				setErrorMessage('Wystąpił błąd podczas dodawania produktu');
 				console.error(error);
@@ -100,7 +79,7 @@ const AddItem = () => {
 
 	return (
 		<div>
-            <BackButtonBar userId={userId} />
+            <BackButtonBar />
 			<TitleBar title='Twoje produkty' />
 			<div className='vertical-container'>
 				<p className='error-message'>{errorMessage}</p>

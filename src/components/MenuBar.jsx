@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import useStore from './useStore';
 
-const MenuBar = ({userId, setErrorMessage}) => {
+const MenuBar = ({ setErrorMessage}) => {
 
 	const navigate = useNavigate();
 	const baseUrl = useStore(state => state.baseUrl);
@@ -10,6 +10,8 @@ const MenuBar = ({userId, setErrorMessage}) => {
 	const handleDeleteButton = async () => {
 		try {
 			const token = localStorage.getItem('jwtToken');
+			const userId = localStorage.getItem('userId');
+
 			await axios.delete(`${baseUrl}/api/users/${parseInt(userId)}`, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
@@ -37,7 +39,7 @@ const MenuBar = ({userId, setErrorMessage}) => {
 		}
 
 	const handleAddItemButton = () => {
-		navigate('/add-item', {state: {userId}});
+		navigate('/add-item');
 	}
 
 	return (

@@ -6,7 +6,6 @@ const MenuBar = ({userId, setErrorMessage}) => {
 
 	const navigate = useNavigate();
 	const baseUrl = useStore(state => state.baseUrl);
-	const handleLogoutButton = useStore(state => state.handleLogoutButton);
 
 	const handleDeleteButton = async () => {
 		try {
@@ -19,6 +18,23 @@ const MenuBar = ({userId, setErrorMessage}) => {
 			setErrorMessage('Błąd usuwania użytkownika');
 		}
 	};
+	const handleLogoutButton = async (navigate) => {
+			try {
+				const token = localStorage.getItem('jwtToken');
+				await axios.post(
+					`${useStore.getState().baseUrl}/api/users/logout`,
+					{},
+					{
+						headers: { Authorization: `Bearer ${token}` },
+					}
+				);
+				localStorage.removeItem('jwtToken');
+				localStorage.removeItem('userId');
+				navigate('/');
+			} catch (error) {
+				console.error('Błąd wylogowania:', error);
+			}
+		}
 
 	const handleAddItemButton = () => {
 		navigate('/add-item', {state: {userId}});

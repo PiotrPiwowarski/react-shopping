@@ -103,3 +103,14 @@ p {
   color: #cb793a;
 }
 
+/* location */
+.location {
+  display: flex;
+  justify-content: center;
+}
+
+/* user-greeting */
+.user-greeting {
+  text-align: center;
+}
+

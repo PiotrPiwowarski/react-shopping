@@ -4,6 +4,7 @@ import Item from './Item';
 import MenuBar from './MenuBar';
 import TitleBar from './TitleBar';
 import useStore from './useStore';
+import LocationFetcher from './LocationFetcher';
 
 const DisplayItems = () => {
     const baseUrl = useStore(state => state.baseUrl);
@@ -46,8 +47,9 @@ const DisplayItems = () => {
 		<div>
 			<MenuBar setErrorMessage={setErrorMessage} />
 			<TitleBar title='Twoje produkty' />
+            <p className='user-greeting'>Cześć {user.email}!</p>
+            <LocationFetcher setErrorMessage={setErrorMessage} />
 			<div className='vertical-container'>
-				<p>Cześć {user.email}!</p>
 				<p className='error-message'>{errorMessage}</p>
 				{items.map((item) => {
 					return <Item key={item.id} item={item} setErrorMessage={setErrorMessage} refreshItems={fetchItems} />;

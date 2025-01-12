@@ -9,7 +9,17 @@ const Item = ({ item, setErrorMessage, refreshItems }) => {
 	const navigate = useNavigate();
 	const baseUrl = useStore(state => state.baseUrl);
 
+	const isOnline = () => {
+		return navigator.onLine;
+	};
+
 	const handleBuyItem = async () => {
+
+		if (!isOnline()) {
+			setErrorMessage('Brak połączenia z internetem. Operacja zakupu niemożliwa.');
+			return;
+		}
+
 		try {
 			const token = localStorage.getItem('jwtToken');
 
@@ -31,6 +41,11 @@ const Item = ({ item, setErrorMessage, refreshItems }) => {
 	}
 
 	const handleDeleteItem = async () => {
+		if (!isOnline()) {
+			setErrorMessage('Brak połączenia z internetem. Operacja usuwania niemożliwa.');
+			return;
+		}
+
 		const token = localStorage.getItem('jwtToken');
 
 			await axios.delete(
@@ -43,6 +58,10 @@ const Item = ({ item, setErrorMessage, refreshItems }) => {
 	}
 
 	const editItem = () => {
+		if (!isOnline()) {
+			setErrorMessage('Brak połączenia z internetem. Operacja edycji niemożliwa.');
+			return;
+		}
 		navigate('/edit-item', {state: {item: item}})
 	}
 

@@ -19,6 +19,10 @@ const EditItem = () => {
 	const [description, setDescription] = useState(item.description);
 	const [errorMessage, setErrorMessage] = useState(item.message);
 
+	const isOnline = () => {
+		return navigator.onLine;
+	};
+
 	const handleShopInput = (event) => {
 		setShop(event.target.value.trim());
 	};
@@ -50,6 +54,12 @@ const EditItem = () => {
 	};
 
 	const handleAddItemButton = async () => {
+
+		if (!isOnline()) {
+			setErrorMessage('Brak połączenia z internetem. Operacja usuwania niemożliwa.');
+			return;
+		}
+
 		if (shop === '' || productName === '' || price === '' || amount === '') {
 			setErrorMessage('wypełnij wszystkie wymagane pola formularza');
 		} else {

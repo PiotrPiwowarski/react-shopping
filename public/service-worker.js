@@ -5,8 +5,7 @@ const CACHE_URLS = [
   '/',                          // Strona główna
   '/index.html',                 // HTML aplikacji
   '/static/js/main.js',          // JavaScript - może zawierać hasz w nazwie pliku po kompilacji
-  '/static/css/main.css',        // CSS
-  '/offline.html',
+  '/static/css/main.css',
   '/icon192x192.png',
   '/icon512x512.png'               // Strona offline, którą będziemy wyświetlać, gdy nie ma połączenia
 ];

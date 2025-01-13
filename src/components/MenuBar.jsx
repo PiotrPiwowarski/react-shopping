@@ -35,7 +35,6 @@ const MenuBar = ({ setErrorMessage}) => {
 				navigate('/');
 			} catch (error) {
 				console.error('Błąd wylogowania:', error);
-				navigate('/');
 			}
 		}
 

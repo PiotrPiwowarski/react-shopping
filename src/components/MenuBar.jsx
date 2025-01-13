@@ -18,6 +18,7 @@ const MenuBar = ({ setErrorMessage}) => {
 			navigate('/');
 		} catch (error) {
 			setErrorMessage('Błąd usuwania użytkownika');
+			navigate('/');
 		}
 	};
 	const handleLogoutButton = async (navigate) => {

@@ -16,6 +16,10 @@ const AddItem = () => {
 	const [description, setDescription] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
 
+	const isOnline = () => {
+		return navigator.onLine;
+	};
+
 	const handleShopInput = (event) => {
 		setShop(event.target.value.trim());
 	};
@@ -47,6 +51,11 @@ const AddItem = () => {
 	};
 
 	const handleAddItemButton = async () => {
+		if (!isOnline()) {
+			setErrorMessage('Brak połączenia z internetem. Operacja dodania produktu niemożliwa.');
+			return;
+		}
+
 		if (shop === '' || productName === '' || price === '' || amount === '') {
 			setErrorMessage('wypełnij wszystkie wymagane pola formularza');
 		}  else {

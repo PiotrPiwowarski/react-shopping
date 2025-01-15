@@ -17,27 +17,42 @@ const DisplayItems = () => {
         try {
             const token = localStorage.getItem('jwtToken');
             const userId = localStorage.getItem('userId');
-
+    
             console.log(userId);
-
-            const itemsResponse = await axios.get(
-                `${baseUrl}/api/items/${parseInt(userId)}`,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
+    
+            if (navigator.onLine) {
+                const itemsResponse = await axios.get(
+                    `${baseUrl}/api/items/${parseInt(userId)}`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+                const userResponse = await axios.get(
+                    `${baseUrl}/api/users/${parseInt(userId)}`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+                setItems(itemsResponse.data);
+                setUser(userResponse.data);
+            } else {
+                setErrorMessage('Jesteś offline. Wyświetlam dane z pamięci podręcznej.');
+                const cache = await caches.open("shopply-pwa-api-cache");
+                const cachedItemsResponse = await cache.match(`${baseUrl}/api/items/${parseInt(userId)}`);
+                const cachedUserResponse = await cache.match(`${baseUrl}/api/users/${parseInt(userId)}`);
+                
+                if (cachedItemsResponse && cachedUserResponse) {
+                    setItems(await cachedItemsResponse.json());
+                    setUser(await cachedUserResponse.json());
+                } else {
+                    setErrorMessage('Brak danych w pamięci podręcznej.');
                 }
-            );
-            const userResponse = await axios.get(
-                `${baseUrl}/api/users/${parseInt(userId)}`,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            );
-            setItems(itemsResponse.data);
-            setUser(userResponse.data);
+            }
         } catch (error) {
             setErrorMessage('Pobranie listy produktów się nie powiodło');
         }
     };
+    
 
     useEffect(() => {
         fetchItems(baseUrl);

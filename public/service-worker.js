@@ -66,7 +66,7 @@ self.addEventListener("install", (event) => {
       caches
         .open("shopply-pwa-cache")
         .then((cache) =>
-          cache.addAll(["/", "/icon192x192.png", "/icon512x512.png", "/manifest.json"])
+          cache.addAll(["/", "/index.html", "/src/App.js", "/icon192x192.png", "/icon512x512.png", "/manifest.json"])
         )
     );
   });

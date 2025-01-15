@@ -33,10 +33,10 @@ const MenuBar = ({ setErrorMessage}) => {
 				);
 				localStorage.removeItem('jwtToken');
 				localStorage.removeItem('userId');
-				navigate('/');
 			} catch (error) {
 				console.error('Błąd wylogowania:', error);
 			}
+			navigate('/');
 		}
 
 	const handleAddItemButton = () => {

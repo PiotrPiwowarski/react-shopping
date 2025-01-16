@@ -1,6 +1,5 @@
 import React from 'react';
-import {useState, useEffect} from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import DisplayItems from './components/DisplayItems';
 import Home from './components/Home';
@@ -10,13 +9,6 @@ import AddItem from './components/AddItem';
 import EditItem from './components/EditItem';
 
 const App = () => {
-
-	const [isUserAlreadyLoggedIn, setIsUserAlreadyLoggedIn] = useState(false);
-
-	useEffect(() => {
-		const isLoggedIn = localStorage.getItem('isUserAlreadyLoggedIn') === 'true';
-		setIsUserAlreadyLoggedIn(isLoggedIn);
-	}, []);
 
 	return (
 		<Router>

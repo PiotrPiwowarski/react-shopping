@@ -20,7 +20,7 @@ const App = () => {
 	return (
 		<Router>
 			<Routes>
-				<Route path='/' element={isUserAlreadyLoggedIn ? <Navigate to='/display-items' /> : <Home />} />
+				<Route path='/' element={isUserAlreadyLoggedIn ? <DisplayItems /> : <Home />} />
 				<Route path='/login' element={<Login />} />
 				<Route path='/registration' element={<Registration />} />
 				<Route path='/display-items' element={<DisplayItems />} />

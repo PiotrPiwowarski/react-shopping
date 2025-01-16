@@ -1,26 +1,31 @@
 self.addEventListener("fetch", (event) => {
-  if (event.request.url.includes("/api/items/") || event.request.url.includes("/api/users/")) {
+  const url = new URL(event.request.url);
+  if (url.pathname.startsWith("/api/")) {
     event.respondWith(
-      caches.open("shopply-pwa-api-cache").then((cache) =>
-        fetch(event.request)
+      caches.open("shopply-pwa-api-cache").then((cache) => {
+        return fetch(event.request)
           .then((response) => {
-            cache.put(event.request, response.clone());
+            if (response.status === 200) {
+              cache.put(event.request, response.clone());
+            }
             return response;
           })
           .catch(() => {
-            return cache.match(event.request);
-          })
-      )
-    );
-  } else {
-    event.respondWith(
-      caches.match(event.request).then((response) => {
-        if (response) return response;
-        return fetch(event.request);
+            return cache.match(event.request).then((cachedResponse) => {
+              if (cachedResponse) {
+                return cachedResponse;
+              }
+              return new Response(JSON.stringify({ error: "Brak danych w cache" }), {
+                status: 503,
+                headers: { "Content-Type": "application/json" },
+              });
+            });
+          });
       })
     );
   }
 });
+
 
   
   self.addEventListener("activate", (event) => {

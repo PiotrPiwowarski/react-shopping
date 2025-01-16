@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import useStore from './useStore';
 
-const MenuBar = ({ setErrorMessage}) => {
+const MenuBar = ({ setErrorMessage }) => {
 
 	const navigate = useNavigate();
 	const baseUrl = useStore(state => state.baseUrl);

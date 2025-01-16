@@ -21,7 +21,7 @@ const MenuBar = ({ setErrorMessage }) => {
 			navigate('/');
 		}
 	};
-	const handleLogoutButton = async (navigate) => {
+	const handleLogoutButton = async () => {
 			try {
 				const token = localStorage.getItem('jwtToken');
 				await axios.post(

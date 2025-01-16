@@ -14,7 +14,7 @@ const App = () => {
 	const [isUserAlreadyLoggedIn, setIsUserAlreadyLoggedIn] = useState(false);
 
 	useEffect(() => {
-		setIsUserAlreadyLoggedIn(localStorage.getItem('isUserAlreadyLoggedIn'));
+		setIsUserAlreadyLoggedIn(localStorage.getItem('isUserAlreadyLoggedIn') === 'true');
 	}, []);
 
 	return (

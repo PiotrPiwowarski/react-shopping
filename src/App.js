@@ -14,13 +14,14 @@ const App = () => {
 	const [isUserAlreadyLoggedIn, setIsUserAlreadyLoggedIn] = useState(false);
 
 	useEffect(() => {
-		setIsUserAlreadyLoggedIn(localStorage.getItem('isUserAlreadyLoggedIn') === 'true');
+		const isLoggedIn = localStorage.getItem('isUserAlreadyLoggedIn') === 'true';
+		setIsUserAlreadyLoggedIn(isLoggedIn);
 	}, []);
 
 	return (
 		<Router>
 			<Routes>
-				<Route path='/' element={isUserAlreadyLoggedIn ? <DisplayItems /> : <Home />} />
+				<Route path='/' element={<Home />} />
 				<Route path='/login' element={<Login />} />
 				<Route path='/registration' element={<Registration />} />
 				<Route path='/display-items' element={<DisplayItems />} />

@@ -36,7 +36,7 @@ const Login = () => {
 					const userId = response.data.userId;
 					localStorage.setItem('jwtToken', token);
 					localStorage.setItem('userId', userId);
-					localStorage.setItem('isUserAlreadyLogged', true);
+					localStorage.setItem('isUserAlreadyLoggedIn', true);
 					navigate('/display-items');
 				} else {
 					setError('Błąd logowania');

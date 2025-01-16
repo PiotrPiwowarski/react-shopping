@@ -11,16 +11,16 @@ import EditItem from './components/EditItem';
 
 const App = () => {
 
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [isUserAlreadyLoggedIn, setIsUserAlreadyLoggedIn] = useState(false);
 
 	useEffect(() => {
-		setIsLoggedIn(localStorage.getItem(isLoggedIn));
+		setIsUserAlreadyLoggedIn(localStorage.getItem('isUserAlreadyLoggedIn'));
 	}, []);
 
 	return (
 		<Router>
 			<Routes>
-				<Route path='/' element={isLoggedIn ? <Navigate to='/display-items' /> : <Home />} />
+				<Route path='/' element={isUserAlreadyLoggedIn ? <Navigate to='/display-items' /> : <Home />} />
 				<Route path='/login' element={<Login />} />
 				<Route path='/registration' element={<Registration />} />
 				<Route path='/display-items' element={<DisplayItems />} />

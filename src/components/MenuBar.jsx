@@ -33,6 +33,7 @@ const MenuBar = ({ setErrorMessage }) => {
 				);
 				localStorage.removeItem('jwtToken');
 				localStorage.removeItem('userId');
+				localStorage.removeItem('isUserAlreadyLoggedIn')
 			} catch (error) {
 				console.error('Błąd wylogowania:', error);
 			}

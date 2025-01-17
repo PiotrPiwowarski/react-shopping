@@ -10,6 +10,7 @@ const BackButtonBar = () => {
     return (
         <div className='headbar'>
             <button onClick={handleReturnButton}>wróć</button>
+            
         </div>
     );
 }

@@ -1,5 +1,6 @@
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
+
   if (url.pathname.startsWith("/api/")) {
     event.respondWith(
       caches.open("shopply-pwa-api-cache").then((cache) => {
@@ -23,33 +24,47 @@ self.addEventListener("fetch", (event) => {
           });
       })
     );
-  }
-});
-
-
-  
-  self.addEventListener("activate", (event) => {
-    console.log("[SW] Activate event");
-    event.waitUntil(self.clients.claim());
-  });
-  
-  self.addEventListener("fetch", (event) => {
+  } else {
     event.respondWith(
       caches.match(event.request).then((response) => {
         if (response) return response;
         return fetch(event.request);
       })
     );
-  });
+  }
+});
+
+self.addEventListener("activate", (event) => {
+  console.log("[SW] Activate event");
+  const cacheWhitelist = ["shopply-pwa-api-cache"];
   
-  self.addEventListener("push", (event) => {
-    console.log("[SW] Push event");
-    const data = event.data?.json() || {};
-    const title = data.title || "Nowa informacja!";
-    const options = {
-      body: data.body || "Otrzymałeś wiadomość.",
-      icon: "/icon192x192.png",
-    };
-  
-    event.waitUntil(self.registration.showNotification(title, options));
-  });
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (!cacheWhitelist.includes(cacheName)) {
+            console.log(`[SW] Deleting cache: ${cacheName}`);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener("push", (event) => {
+  console.log("[SW] Push event");
+  const data = event.data?.json() || {};
+  const title = data.title || "Nowa informacja!";
+  const options = {
+    body: data.body || "Otrzymałeś wiadomość.",
+    icon: "/icon192x192.png",
+    badge: "/badge.png",
+    tag: data.tag || "general",
+    actions: data.actions || [],
+    data: data.data || {},
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+

@@ -1,16 +1,21 @@
 const PRECACHE = 'precache-v1';
 const RUNTIME = 'runtime';
 
-// A list of local resources we always want to be cached.
+// Lista zasobów, które zawsze mają być cachowane
 const PRECACHE_URLS = [
   'index.html',
-  './', // Alias for index.html
+  './', // Alias dla index.html
   'styles.css',
   '../../styles/main.css',
   'demo.js'
 ];
 
-// The install handler takes care of precaching the resources we always need.
+// Lista URL API, które mają być cachowane
+const API_CACHE_URLS = [
+  '/api/items/', // API z produktami
+  '/api/users/'  // API z użytkownikami
+];
+
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(PRECACHE)
@@ -19,7 +24,6 @@ self.addEventListener('install', event => {
   );
 });
 
-// The activate handler takes care of cleaning up old caches.
 self.addEventListener('activate', event => {
   const currentCaches = [PRECACHE, RUNTIME];
   event.waitUntil(
@@ -33,11 +37,8 @@ self.addEventListener('activate', event => {
   );
 });
 
-// The fetch handler serves responses for same-origin resources from a cache.
-// If no response is found, it populates the runtime cache with the response
-// from the network before returning it to the page.
 self.addEventListener('fetch', event => {
-  // Skip cross-origin requests, like those for Google Analytics.
+  // Sprawdzenie, czy zapytanie dotyczy zasobów statycznych
   if (event.request.url.startsWith(self.location.origin)) {
     event.respondWith(
       caches.match(event.request).then(cachedResponse => {
@@ -45,16 +46,36 @@ self.addEventListener('fetch', event => {
           return cachedResponse;
         }
 
+        // Zapytania do API
+        if (event.request.url.includes('/api/')) {
+          return caches.open(RUNTIME).then(cache => {
+            return fetch(event.request).then(response => {
+              if (response.ok) {
+                // Zapisz odpowiedź z API do cache
+                cache.put(event.request, response.clone());
+              }
+              return response;
+            }).catch(() => {
+              // W przypadku braku internetu, zwróć dane z cache (jeśli istnieją)
+              return caches.match(event.request).then(cachedResponse => {
+                if (cachedResponse) {
+                  return cachedResponse;
+                }
+                return new Response('Brak danych w pamięci podręcznej', { status: 503 });
+              });
+            });
+          });
+        }
+
+        // Inne zasoby (np. pliki statyczne)
         return caches.open(RUNTIME).then(cache => {
           return fetch(event.request).then(response => {
-            return cache.put(event.request, response.clone()).then(() => {
-              return response;
-            });
+            cache.put(event.request, response.clone());
+            return response;
           });
         });
       })
     );
   }
 });
-
 

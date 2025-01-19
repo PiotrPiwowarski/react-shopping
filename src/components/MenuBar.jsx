@@ -34,6 +34,8 @@ const MenuBar = ({ setErrorMessage, refreshItems }) => {
 			localStorage.removeItem('userId');
 			localStorage.removeItem('logged');
 			navigate('/home');
+
+			
 		} catch (error) {
 			console.error('Błąd wylogowania:', error);
 		}

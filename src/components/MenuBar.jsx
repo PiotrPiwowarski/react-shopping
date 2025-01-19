@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import useStore from './useStore';
 
-const MenuBar = ({ setErrorMessage }) => {
+const MenuBar = ({ setErrorMessage, refreshItems }) => {
 
 	const navigate = useNavigate();
 	const baseUrl = useStore(state => state.baseUrl);
@@ -43,11 +43,16 @@ const MenuBar = ({ setErrorMessage }) => {
 		navigate('/add-item');
 	}
 
+	const handleRefreshButton = () => {
+		refreshItems(baseUrl);
+	}
+
 	return (
 		<div className='headbar'>
 			<button onClick={handleDeleteButton}>usuń konto</button>
 			<button onClick={() => handleLogoutButton(navigate)}>wyloguj się</button>
 			<button onClick={handleAddItemButton}>dodaj produkt</button>
+			<button onClick={handleRefreshButton}>odśwież</button>
 		</div>
 	);
 };

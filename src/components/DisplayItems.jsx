@@ -64,7 +64,7 @@ const DisplayItems = () => {
 
     return (
         <div>
-            <MenuBar setErrorMessage={setErrorMessage} />
+            <MenuBar setErrorMessage={setErrorMessage} refreshItems={fetchItems} />
             <TitleBar title='Twoje produkty' />
             <p className='user-greeting'>Cześć {user.email}!</p>
             <LocationFetcher setErrorMessage={setErrorMessage} />

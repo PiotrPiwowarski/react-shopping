@@ -15,41 +15,43 @@ const DisplayItems = () => {
     const fetchItems = async (baseUrl) => {
         try {
             const token = localStorage.getItem('jwtToken');
-            const userId = localStorage.getItem('userId');
-            
+            const userId = localStorage.getItem('userId'); // To może być ciąg znaków
+    
+            // Pobieranie danych z API, jeśli mamy połączenie z internetem
             if (navigator.onLine) {
-                // Gdy mamy połączenie z internetem, pobierz dane z API
                 const itemsResponse = await axios.get(`${baseUrl}/api/items/${parseInt(userId)}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-
+    
                 const userResponse = await axios.get(`${baseUrl}/api/users/${parseInt(userId)}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-
+    
                 setItems(itemsResponse.data);
                 setUser(userResponse.data);
-
-                // Zapisz dane w cache
-                caches.open('runtime').then(cache => {
-                    cache.put(`${baseUrl}/api/items/${userId}`, new Response(JSON.stringify(itemsResponse.data)));
-                    cache.put(`${baseUrl}/api/users/${userId}`, new Response(JSON.stringify(userResponse.data)));
-                });
+    
+                // Zapisanie odpowiedzi w cache
+                const cache = await caches.open('runtime');
+                cache.put(`${baseUrl}/api/items/${parseInt(userId)}`, new Response(JSON.stringify(itemsResponse.data)));
+                cache.put(`${baseUrl}/api/users/${parseInt(userId)}`, new Response(JSON.stringify(userResponse.data)));
             } else {
-                // Gdy brak połączenia, sprawdź dane w cache
                 setErrorMessage('Jesteś offline. Wyświetlam dane z pamięci podręcznej.');
+    
                 const cache = await caches.open('runtime');
                 const cachedItemsResponse = await cache.match(`${baseUrl}/api/items/${parseInt(userId)}`);
                 const cachedUserResponse = await cache.match(`${baseUrl}/api/users/${parseInt(userId)}`);
-
+    
                 if (cachedItemsResponse && cachedUserResponse) {
-                    setItems(await cachedItemsResponse.json());
-                    setUser(await cachedUserResponse.json());
+                    const cachedItems = await cachedItemsResponse.json();
+                    const cachedUser = await cachedUserResponse.json();
+                    setItems(cachedItems);
+                    setUser(cachedUser);
                 } else {
                     setErrorMessage('Brak danych w pamięci podręcznej.');
                 }
             }
         } catch (error) {
+            console.error('Błąd podczas pobierania danych: ', error);
             setErrorMessage('Pobranie listy produktów się nie powiodło');
         }
     };

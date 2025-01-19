@@ -59,6 +59,7 @@ const DisplayItems = () => {
     };
 
     useEffect(() => {
+        localStorage.setItem('logged', 'true');
         fetchItems(baseUrl);
     }, [baseUrl]);
 

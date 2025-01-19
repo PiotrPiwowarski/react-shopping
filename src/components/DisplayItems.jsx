@@ -40,8 +40,8 @@ const DisplayItems = () => {
     
                 const cache = await caches.open('runtime');
                 console.log('pobieranie danych z cache');
-                const cachedItemsResponse = await cache.match(`/api/items/${parseInt(userId)}`);
-                const cachedUserResponse = await cache.match(`/api/users/${parseInt(userId)}`);
+                const cachedItemsResponse = await cache.match(`${baseUrl}/api/items/${parseInt(userId)}`);
+                const cachedUserResponse = await cache.match(`${baseUrl}/api/users/${parseInt(userId)}`);
                 
                 if (cachedItemsResponse && cachedUserResponse) {
                     const cachedItems = await cachedItemsResponse.json(); // Oczekujemy na dane

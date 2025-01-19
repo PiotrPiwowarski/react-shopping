@@ -12,8 +12,8 @@ const PRECACHE_URLS = [
 
 // Lista URL API, które mają być cachowane
 const API_CACHE_URLS = [
-  '/api/items/', // API z produktami
-  '/api/users/'  // API z użytkownikami
+  'api-items', // API z produktami
+  'api-users'  // API z użytkownikami
 ];
 
 self.addEventListener('install', event => {
@@ -47,7 +47,7 @@ self.addEventListener('fetch', event => {
         }
 
         // Zapytania do API
-        if (event.request.url.includes('/api/')) {
+        if (event.request.url.includes('api')) {
           return caches.open(RUNTIME).then(cache => {
             return fetch(event.request).then(response => {
               if (response.ok) {

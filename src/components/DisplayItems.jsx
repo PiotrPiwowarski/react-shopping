@@ -33,15 +33,15 @@ const DisplayItems = () => {
     
                 // Zapisanie odpowiedzi w cache
                 const cache = await caches.open('runtime');
-                cache.put(`${baseUrl}/api/items/${parseInt(userId)}`, new Response(JSON.stringify(itemsResponse.data)));
-                cache.put(`${baseUrl}/api/users/${parseInt(userId)}`, new Response(JSON.stringify(userResponse.data)));
+                cache.put(`api-items`, new Response(JSON.stringify(itemsResponse.data)));
+                cache.put(`api-users`, new Response(JSON.stringify(userResponse.data)));
             } else {
                 setErrorMessage('Jesteś offline. Wyświetlam dane z pamięci podręcznej.');
     
                 const cache = await caches.open('runtime');
                 console.log('pobieranie danych z cache');
-                const cachedItemsResponse = await cache.match(`${baseUrl}/api/items/${parseInt(userId)}`);
-                const cachedUserResponse = await cache.match(`${baseUrl}/api/users/${parseInt(userId)}`);
+                const cachedItemsResponse = await cache.match(`api-items`);
+                const cachedUserResponse = await cache.match(`api-users`);
                 
                 if (cachedItemsResponse && cachedUserResponse) {
                     const cachedItems = await cachedItemsResponse.json(); // Oczekujemy na dane

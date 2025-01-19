@@ -12,6 +12,7 @@ const DisplayItems = () => {
     const [items, setItems] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
 
+    
     const fetchItems = async (baseUrl) => {
         try {
             const token = localStorage.getItem('jwtToken');
@@ -38,12 +39,13 @@ const DisplayItems = () => {
                 setErrorMessage('Jesteś offline. Wyświetlam dane z pamięci podręcznej.');
     
                 const cache = await caches.open('runtime');
+                console.log('pobieranie danych z cache');
                 const cachedItemsResponse = await cache.match(`${baseUrl}/api/items/${parseInt(userId)}`);
                 const cachedUserResponse = await cache.match(`${baseUrl}/api/users/${parseInt(userId)}`);
-    
+                
                 if (cachedItemsResponse && cachedUserResponse) {
-                    const cachedItems = await cachedItemsResponse.json();
-                    const cachedUser = await cachedUserResponse.json();
+                    const cachedItems = await cachedItemsResponse.json(); // Oczekujemy na dane
+                    const cachedUser = await cachedUserResponse.json(); // Oczekujemy na dane
                     setItems(cachedItems);
                     setUser(cachedUser);
                 } else {

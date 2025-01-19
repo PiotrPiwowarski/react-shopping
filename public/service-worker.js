@@ -1,27 +1,31 @@
-const STATIC_CACHE = "shopply-pwa-static-cache-v1";
-const API_CACHE = "shopply-pwa-api-cache";
+const STATIC_CACHE = "static-cache-v1";
+const DYNAMIC_CACHE = "dynamic-cache-v1";
+
 const STATIC_FILES = [
-  "/",
-  "/index.html", 
-  "/static/js/main.js", 
-  "/static/css/main.css", 
-  "/icon192x192.png", 
-  "/icon512x512.png", 
+  "/",                       // Strona główna
+  "/index.html",             // Główny HTML
+  "/static/js/main.js",      // Główne JS
+  "/static/css/main.css",    // Główne CSS
+  "/icon192x192.png",        // Ikona PWA
+  "/icon512x512.png",        // Ikona PWA
 ];
 
+// Instalacja Service Workera
 self.addEventListener("install", (event) => {
   console.log("[SW] Install event");
   event.waitUntil(
     caches.open(STATIC_CACHE).then((cache) => {
-      return cache.addAll(STATIC_FILES);
+      return cache.addAll(STATIC_FILES).catch((error) => {
+        console.error("[SW] Error caching static files:", error);
+      });
     })
   );
 });
 
+// Aktywacja Service Workera
 self.addEventListener("activate", (event) => {
   console.log("[SW] Activate event");
-  const cacheWhitelist = [STATIC_CACHE, API_CACHE];
-
+  const cacheWhitelist = [STATIC_CACHE, DYNAMIC_CACHE];
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -36,12 +40,14 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+// Obsługa żądań (Fetch)
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
 
   if (url.pathname.startsWith("/api/")) {
+    // Obsługa API: Pobieranie z internetu, a w przypadku braku sieci — cache
     event.respondWith(
-      caches.open(API_CACHE).then((cache) => {
+      caches.open(DYNAMIC_CACHE).then((cache) => {
         return fetch(event.request)
           .then((response) => {
             if (response.status === 200) {
@@ -50,10 +56,9 @@ self.addEventListener("fetch", (event) => {
             return response;
           })
           .catch(() => {
+            console.warn("[SW] No internet, serving from cache");
             return cache.match(event.request).then((cachedResponse) => {
-              if (cachedResponse) {
-                return cachedResponse;
-              }
+              if (cachedResponse) return cachedResponse;
               return new Response(JSON.stringify({ error: "Brak danych w cache" }), {
                 status: 503,
                 headers: { "Content-Type": "application/json" },
@@ -63,20 +68,12 @@ self.addEventListener("fetch", (event) => {
       })
     );
   } else {
+    // Obsługa statycznych plików: Cache First
     event.respondWith(
-      caches.match(event.request).then((response) => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request)
-          .then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
-              caches.open(STATIC_CACHE).then((cache) => {
-                cache.put(event.request, networkResponse.clone());
-              });
-            }
-            return networkResponse;
-          });
+      caches.match(event.request).then((cachedResponse) => {
+        return cachedResponse || fetch(event.request).catch(() => {
+          console.warn("[SW] No internet and no cache match");
+        });
       })
     );
   }

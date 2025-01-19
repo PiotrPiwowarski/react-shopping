@@ -44,6 +44,8 @@ const DisplayItems = () => {
         fetchItems(baseUrl);
     }, [baseUrl]);
 
+    
+
     return (
         <div>
             <MenuBar setErrorMessage={setErrorMessage} />

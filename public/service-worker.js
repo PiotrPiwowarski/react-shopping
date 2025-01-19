@@ -1,76 +1,57 @@
-const STATIC_CACHE = "static-cache-v1";
-const DYNAMIC_CACHE = "dynamic-cache-v1";
+const PRECACHE = 'precache-v1';
+const RUNTIME = 'runtime';
 
-const STATIC_FILES = [
-  "/",                       // Strona główna
-  "/index.html",    // Główne CSS
-  "/icon192x192.png",        // Ikona PWA
-  "/icon512x512.png",        // Ikona PWA
+// A list of local resources we always want to be cached.
+const PRECACHE_URLS = [
+  'index.html',
+  './', // Alias for index.html
+  'styles.css',
+  '../../styles/main.css',
+  'demo.js'
 ];
 
-// Instalacja Service Workera
-self.addEventListener("install", (event) => {
-  console.log("[SW] Install event");
+// The install handler takes care of precaching the resources we always need.
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => {
-      return cache.addAll(STATIC_FILES).catch((error) => {
-        console.error("[SW] Error caching static files:", error);
-      });
-    })
+    caches.open(PRECACHE)
+      .then(cache => cache.addAll(PRECACHE_URLS))
+      .then(self.skipWaiting())
   );
 });
 
-// Aktywacja Service Workera
-self.addEventListener("activate", (event) => {
-  console.log("[SW] Activate event");
-  const cacheWhitelist = [STATIC_CACHE, DYNAMIC_CACHE];
+// The activate handler takes care of cleaning up old caches.
+self.addEventListener('activate', event => {
+  const currentCaches = [PRECACHE, RUNTIME];
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            console.log(`[SW] Deleting old cache: ${cacheName}`);
-            return caches.delete(cacheName);
-          }
-        })
-      );
+    caches.keys().then(cacheNames => {
+      return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
+    }).then(cachesToDelete => {
+      return Promise.all(cachesToDelete.map(cacheToDelete => {
+        return caches.delete(cacheToDelete);
+      }));
     }).then(() => self.clients.claim())
   );
 });
 
-// Obsługa żądań (Fetch)
-self.addEventListener("fetch", (event) => {
-  const url = new URL(event.request.url);
-
-  if (url.pathname.startsWith("/api/")) {
-    // Obsługa API: Pobieranie z internetu, a w przypadku braku sieci — cache
+// The fetch handler serves responses for same-origin resources from a cache.
+// If no response is found, it populates the runtime cache with the response
+// from the network before returning it to the page.
+self.addEventListener('fetch', event => {
+  // Skip cross-origin requests, like those for Google Analytics.
+  if (event.request.url.startsWith(self.location.origin)) {
     event.respondWith(
-      caches.open(DYNAMIC_CACHE).then((cache) => {
-        return fetch(event.request)
-          .then((response) => {
-            if (response.status === 200) {
-              cache.put(event.request, response.clone());
-            }
-            return response;
-          })
-          .catch(() => {
-            console.warn("[SW] No internet, serving from cache");
-            return cache.match(event.request).then((cachedResponse) => {
-              if (cachedResponse) return cachedResponse;
-              return new Response(JSON.stringify({ error: "Brak danych w cache" }), {
-                status: 503,
-                headers: { "Content-Type": "application/json" },
-              });
+      caches.match(event.request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        return caches.open(RUNTIME).then(cache => {
+          return fetch(event.request).then(response => {
+            // Put a copy of the response in the runtime cache.
+            return cache.put(event.request, response.clone()).then(() => {
+              return response;
             });
           });
-      })
-    );
-  } else {
-    // Obsługa statycznych plików: Cache First
-    event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
-        return cachedResponse || fetch(event.request).catch(() => {
-          console.warn("[SW] No internet and no cache match");
         });
       })
     );

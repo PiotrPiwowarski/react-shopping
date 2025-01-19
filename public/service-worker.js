@@ -3,9 +3,7 @@ const DYNAMIC_CACHE = "dynamic-cache-v1";
 
 const STATIC_FILES = [
   "/",                       // Strona główna
-  "/index.html",             // Główny HTML
-  "/static/js/main.js",      // Główne JS
-  "/static/css/main.css",    // Główne CSS
+  "/index.html",    // Główne CSS
   "/icon192x192.png",        // Ikona PWA
   "/icon512x512.png",        // Ikona PWA
 ];

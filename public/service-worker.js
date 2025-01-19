@@ -47,7 +47,7 @@ self.addEventListener('fetch', event => {
         }
 
         // Zapytania do API
-        if (event.request.url.includes('api')) {
+        if (API_CACHE_URLS.some(url => event.request.url.includes(url))) {
           return caches.open(RUNTIME).then(cache => {
             return fetch(event.request).then(response => {
               if (response.ok) {
